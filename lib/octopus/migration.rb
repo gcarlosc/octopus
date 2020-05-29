@@ -69,7 +69,7 @@ module Octopus
           class << self
               alias_method :migrate_without_octopus, :migrate
               alias_method :migrate, :migrate_with_octopus
-              
+
               alias_method :up_without_octopus, :up
               alias_method :up, :up_with_octopus
 
@@ -96,7 +96,7 @@ module Octopus
     end
     if Octopus.atleast_rails52?
       ### Post RAILS 5.2 Migration methods
-      
+
       def run_with_octopus(&block)
         return run_without_octopus(&block) unless connection.is_a?(Octopus::Proxy)
         shards = migrations.map(&:shards).flatten.map(&:to_s)
@@ -123,16 +123,16 @@ module Octopus
 
         migrations.select { |m| m.shards.include?(connection.current_shard.to_sym) }
       end
-      
-      private 
-      
+
+      private
+
       def connection
         ActiveRecord::Base.connection
       end
-      
-    else 
+
+    else
       ### Pre RAILS 5.2 Migration methods
-      
+
       def run_with_octopus(&block)
         run_without_octopus(&block)
       rescue ActiveRecord::UnknownMigrationVersionError => e
