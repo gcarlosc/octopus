@@ -39,13 +39,12 @@ module OctopusHelper
   end
 
   def self.migrate_to_version(direction, root, version)
-    # if Octopus.atleast_rails52?
-    #   migrations = ActiveRecord::MigrationContext.new(root).migrations.select {|mig| version == mig.version }
-    #   ActiveRecord::Migrator.new(direction, migrations, version).run
-    # else
-    #   ActiveRecord::Migrator.run(direction, root, version)
-    # end
-    puts "No migraré ni michi!"
+    if Octopus.atleast_rails52?
+      migrations = ActiveRecord::MigrationContext.new(root).migrations.select {|mig| version == mig.version }
+      ActiveRecord::Migrator.new(direction, migrations, version).run
+    else
+      ActiveRecord::Migrator.run(direction, root, version)
+    end
   end
 
   def self.using_environment(environment, &_block)
