@@ -112,9 +112,9 @@ module Octopus
     end
 
     def check_schema_migrations(shard)
-      OctopusModel.using(shard).connection.table_exists?(
-        ActiveRecord::Migrator.schema_migrations_table_name,
-      ) || OctopusModel.using(shard).connection.initialize_schema_migrations_table
+      # OctopusModel.using(shard).connection.table_exists?(
+      #   ActiveRecord::Migrator.schema_migrations_table_name,
+      # ) || OctopusModel.using(shard).connection.initialize_schema_migrations_table
     end
 
     def transaction(options = {}, &block)
@@ -192,15 +192,15 @@ module Octopus
     def current_model_replicated?
       replicated && (current_model.try(:replicated) || fully_replicated?)
     end
-    
+
     def initialize_schema_migrations_table
       if Octopus.atleast_rails52?
         select_connection.transaction { ActiveRecord::SchemaMigration.create_table }
-      else 
+      else
         select_connection.initialize_schema_migrations_table
       end
     end
-    
+
     def initialize_metadata_table
       select_connection.transaction { ActiveRecord::InternalMetadata.create_table }
     end
